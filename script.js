@@ -1,51 +1,108 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // -----------------------------
-  // Mobile Navigation
-  // -----------------------------
-  const menuToggle = document.getElementById("menuToggle");
-  const navLinks = document.getElementById("navLinks");
+  const $ = (selector, scope = document) => scope.querySelector(selector);
+  const $$ = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
+
+  const menuToggle = $("#menuToggle");
+  const navLinks = $("#navLinks");
+
+  const heroPreview = $("#heroMenuPreview");
+  const editorPreview = $("#editorMenuPreview");
+  const sectionsEditor = $("#sectionsEditor");
+  const editorMessage = $("#editorMessage");
+  const canvasMeta = $("#canvasMeta");
+
+  const editorCafeName = $("#editorCafeName");
+  const editorSubtitle = $("#editorSubtitle");
+  const editorBadge = $("#editorBadge");
+  const editorAccent = $("#editorAccent");
+  const editorPaper = $("#editorPaper");
+  const editorFontScale = $("#editorFontScale");
+  const editorSpacing = $("#editorSpacing");
+  const editorWidth = $("#editorWidth");
+  const themeButtons = $$(".theme-btn");
+
+  const addSectionBtn = $("#addSectionBtn");
+  const loadDemoBtn = $("#loadDemoBtn");
+  const printBtn = $("#printBtn");
+  const resetBtn = $("#resetBtn");
+  const fillContactBtn = $("#fillContactBtn");
+  const duplicateSampleBtn = $("#duplicateSampleBtn");
+
+  const contactForm = $("#contactForm");
+  const formMessage = $("#formMessage");
+  const nameInput = $("#name");
+  const cafeInput = $("#cafe");
+  const emailInput = $("#email");
+  const planInput = $("#plan");
+  const messageInput = $("#message");
+
+  const pricingButtons = $$(".pricing-select");
 
   if (menuToggle && navLinks) {
-    menuToggle.addEventListener("click", () => {
+    menuToggle.addEventListener("click", function () {
       navLinks.classList.toggle("active");
     });
 
-    document.querySelectorAll(".nav-links a").forEach((link) => {
-      link.addEventListener("click", () => {
+    $$(".nav-links a").forEach((link) => {
+      link.addEventListener("click", function () {
         navLinks.classList.remove("active");
       });
     });
   }
 
-  // -----------------------------
-  // Elements from current page
-  // -----------------------------
-  const contactForm = document.getElementById("contactForm");
-  const formMessage = document.getElementById("formMessage");
+  const themes = {
+    minimal: {
+      background: "linear-gradient(180deg, #fffdf9 0%, #f8f2ea 100%)",
+      text: "#1f1a17",
+      subtext: "#8a674c",
+      heading: "#5a3f2c",
+      divider: "rgba(90, 63, 44, 0.15)",
+      border: "rgba(90, 63, 44, 0.10)",
+      badgeBg: "#5a3f2c",
+      badgeText: "#ffffff"
+    },
+    artisan: {
+      background: "linear-gradient(180deg, #f5ede2 0%, #dfc3a8 100%)",
+      text: "#2e1f16",
+      subtext: "#6a4b39",
+      heading: "#6a4b39",
+      divider: "rgba(106, 75, 57, 0.20)",
+      border: "rgba(106, 75, 57, 0.18)",
+      badgeBg: "#6a4b39",
+      badgeText: "#ffffff"
+    },
+    bold: {
+      background: "linear-gradient(180deg, #2d2824 0%, #5e4735 100%)",
+      text: "#ffffff",
+      subtext: "#f0d2b2",
+      heading: "#f7d8ba",
+      divider: "rgba(255,255,255,0.18)",
+      border: "rgba(255,255,255,0.08)",
+      badgeBg: "#f0d2b2",
+      badgeText: "#2d2824"
+    },
+    editorial: {
+      background: "linear-gradient(180deg, #faf8f5 0%, #efe8df 100%)",
+      text: "#171513",
+      subtext: "#7a6757",
+      heading: "#171513",
+      divider: "rgba(23, 21, 19, 0.12)",
+      border: "rgba(23, 21, 19, 0.10)",
+      badgeBg: "#171513",
+      badgeText: "#ffffff"
+    }
+  };
 
-  const cafeNameInput = document.getElementById("cafe");
-  const nameInput = document.getElementById("name");
-  const emailInput = document.getElementById("email");
-  const planInput = document.getElementById("plan");
-  const messageInput = document.getElementById("message");
-
-  const preview = document.querySelector(".menu-preview");
-  const previewTitle = document.querySelector(".menu-preview-top p");
-  const previewSubtitle = document.querySelector(".menu-preview-top span");
-  const previewSections = document.querySelectorAll(".menu-preview-section");
-  const previewBadge = document.querySelector(".menu-badge");
-
-  const heroButtons = document.querySelector(".hero-buttons");
-  const pricingButtons = document.querySelectorAll(".pricing-card .btn");
-  const styleCards = document.querySelectorAll(".style-card");
-
-  // -----------------------------
-  // Default preview data
-  // -----------------------------
-  const defaultMenu = {
+  const defaultState = {
     cafeName: "RIVER & BEAN",
     subtitle: "Seasonal Café Menu",
     badge: "Print Ready PDF",
+    theme: "minimal",
+    accent: "#5a3f2c",
+    fontScale: 1,
+    spacing: 1,
+    width: 420,
+    paper: "a4",
     sections: [
       {
         title: "Coffee",
@@ -66,465 +123,549 @@ document.addEventListener("DOMContentLoaded", function () {
     ]
   };
 
-  let currentStyle = "minimal";
+  let state = JSON.parse(JSON.stringify(defaultState));
 
-  // -----------------------------
-  // Helpers
-  // -----------------------------
-  function formatPrice(value) {
-    const cleaned = String(value).replace("$", "").trim();
-    if (cleaned === "") return "";
-    const number = Number(cleaned);
-    if (Number.isNaN(number)) return "$" + cleaned;
-    return "$" + number.toFixed(2);
-  }
-
-  function parseItems(inputText) {
-    // Example input:
-    // Latte-5.50, Cappuccino-4.80, Mocha-6
-    if (!inputText || !inputText.trim()) return [];
-
-    return inputText
-      .split(",")
-      .map((item) => item.trim())
-      .filter(Boolean)
-      .map((item) => {
-        const parts = item.split("-");
-        const name = (parts[0] || "").trim();
-        const price = formatPrice(parts[1] || "");
-        return { name, price };
-      })
-      .filter((item) => item.name);
-  }
-
-  function applyStyle(styleName) {
-    currentStyle = styleName;
-
-    if (!preview) return;
-
-    // Remove any old style classes
-    preview.classList.remove("preview-minimal", "preview-artisan", "preview-bold");
-
-    // Add selected style class
-    if (styleName === "minimal") {
-      preview.classList.add("preview-minimal");
-      preview.style.background = "linear-gradient(180deg, #fffdf9 0%, #f8f2ea 100%)";
-      preview.style.color = "#1f1a17";
-      preview.style.border = "1px solid rgba(90, 63, 44, 0.10)";
-    } else if (styleName === "artisan") {
-      preview.classList.add("preview-artisan");
-      preview.style.background = "linear-gradient(180deg, #f5ede2 0%, #dfc3a8 100%)";
-      preview.style.color = "#2e1f16";
-      preview.style.border = "1px solid rgba(106, 75, 57, 0.18)";
-    } else if (styleName === "bold") {
-      preview.classList.add("preview-bold");
-      preview.style.background = "linear-gradient(180deg, #2d2824 0%, #5e4735 100%)";
-      preview.style.color = "#ffffff";
-      preview.style.border = "1px solid rgba(255, 255, 255, 0.08)";
-    }
-
-    // Update section titles and badge colors for contrast
-    const sectionTitles = document.querySelectorAll(".menu-preview-section h3");
-    const menuItems = document.querySelectorAll(".menu-item");
-    const menuItemSpans = document.querySelectorAll(".menu-item span");
-    const menuItemPrices = document.querySelectorAll(".menu-item strong");
-
-    sectionTitles.forEach((title) => {
-      if (styleName === "bold") {
-        title.style.color = "#f7d8ba";
-      } else if (styleName === "artisan") {
-        title.style.color = "#6a4b39";
-      } else {
-        title.style.color = "#5a3f2c";
-      }
-    });
-
-    menuItems.forEach((item) => {
-      item.style.borderBottom =
-        styleName === "bold"
-          ? "1px dashed rgba(255,255,255,0.18)"
-          : "1px dashed rgba(90, 63, 44, 0.15)";
-    });
-
-    menuItemSpans.forEach((item) => {
-      item.style.color = styleName === "bold" ? "#f3ece6" : "";
-    });
-
-    menuItemPrices.forEach((item) => {
-      item.style.color = styleName === "bold" ? "#ffffff" : "";
-    });
-
-    if (previewBadge) {
-      if (styleName === "bold") {
-        previewBadge.style.background = "#f0d2b2";
-        previewBadge.style.color = "#2d2824";
-      } else if (styleName === "artisan") {
-        previewBadge.style.background = "#6a4b39";
-        previewBadge.style.color = "#ffffff";
-      } else {
-        previewBadge.style.background = "#5a3f2c";
-        previewBadge.style.color = "#ffffff";
-      }
-    }
-
-    if (previewTitle) {
-      previewTitle.style.color = styleName === "bold" ? "#ffffff" : "";
-    }
-
-    if (previewSubtitle) {
-      previewSubtitle.style.color = styleName === "bold" ? "#f0d2b2" : "";
+  function setMessage(text) {
+    if (editorMessage) {
+      editorMessage.textContent = text;
     }
   }
 
-  function renderMenu(menuData) {
-    if (!preview || !previewTitle || !previewSubtitle) return;
+  function formatMoney(value) {
+    const raw = String(value).trim();
+    if (!raw) return "";
+    if (raw.startsWith("$")) return raw;
 
-    previewTitle.textContent = (menuData.cafeName || defaultMenu.cafeName).toUpperCase();
-    previewSubtitle.textContent = menuData.subtitle || defaultMenu.subtitle;
-
-    if (previewBadge) {
-      previewBadge.textContent = menuData.badge || "Print Ready PDF";
+    const number = Number(raw);
+    if (!Number.isNaN(number)) {
+      return `$${number.toFixed(2)}`;
     }
 
-    const sections = menuData.sections && menuData.sections.length
-      ? menuData.sections
-      : defaultMenu.sections;
+    return `$${raw}`;
+  }
 
-    // Make sure there are enough section containers
-    const previewContainer = preview;
-    let currentSectionElements = previewContainer.querySelectorAll(".menu-preview-section");
+  function getPaperMeta() {
+    if (state.paper === "letter") return "Letter";
+    if (state.paper === "square") return "Square";
+    return "A4";
+  }
 
-    // Remove old sections
-    currentSectionElements.forEach((section) => section.remove());
+  function cloneState() {
+    return JSON.parse(JSON.stringify(state));
+  }
 
-    // Rebuild sections
-    sections.forEach((sectionData) => {
+  function renderPreview(targetPreview) {
+    if (!targetPreview) return;
+
+    const theme = themes[state.theme] || themes.minimal;
+
+    let top = $(".menu-preview-top", targetPreview);
+    if (!top) {
+      top = document.createElement("div");
+      top.className = "menu-preview-top";
+      targetPreview.prepend(top);
+    }
+
+    let title = $("p", top);
+    let subtitle = $("span", top);
+
+    if (!title) {
+      title = document.createElement("p");
+      top.appendChild(title);
+    }
+
+    if (!subtitle) {
+      subtitle = document.createElement("span");
+      top.appendChild(subtitle);
+    }
+
+    title.textContent = state.cafeName.toUpperCase();
+    subtitle.textContent = state.subtitle;
+
+    $$(".menu-preview-section", targetPreview).forEach((section) => section.remove());
+
+    let badge = $(".menu-badge", targetPreview);
+    if (!badge) {
+      badge = document.createElement("div");
+      badge.className = "menu-badge";
+      targetPreview.appendChild(badge);
+    }
+
+    state.sections.forEach((sectionData) => {
       const section = document.createElement("div");
       section.className = "menu-preview-section";
 
       const heading = document.createElement("h3");
-      heading.textContent = sectionData.title || "Menu Section";
+      heading.textContent = sectionData.title || "Section";
       section.appendChild(heading);
 
-      const items = sectionData.items && sectionData.items.length
-        ? sectionData.items
-        : [{ name: "Sample Item", price: "$0.00" }];
+      sectionData.items.forEach((item) => {
+        const row = document.createElement("div");
+        row.className = "menu-item";
 
-      items.forEach((itemData) => {
-        const itemRow = document.createElement("div");
-        itemRow.className = "menu-item";
+        const name = document.createElement("span");
+        name.textContent = item.name || "Item";
 
-        const nameSpan = document.createElement("span");
-        nameSpan.textContent = itemData.name || "Item";
+        const price = document.createElement("strong");
+        price.textContent = formatMoney(item.price || "");
 
-        const priceStrong = document.createElement("strong");
-        priceStrong.textContent = itemData.price || "$0.00";
-
-        itemRow.appendChild(nameSpan);
-        itemRow.appendChild(priceStrong);
-        section.appendChild(itemRow);
+        row.appendChild(name);
+        row.appendChild(price);
+        section.appendChild(row);
       });
 
-      // Insert sections before badge if badge exists
-      if (previewBadge) {
-        previewContainer.insertBefore(section, previewBadge);
-      } else {
-        previewContainer.appendChild(section);
+      targetPreview.insertBefore(section, badge);
+    });
+
+    badge.textContent = state.badge;
+
+    targetPreview.style.width = `min(100%, ${state.width}px)`;
+    targetPreview.style.background = theme.background;
+    targetPreview.style.color = theme.text;
+    targetPreview.style.border = `1px solid ${theme.border}`;
+    targetPreview.style.padding = `${28 * state.spacing}px`;
+    targetPreview.style.fontSize = `${state.fontScale}rem`;
+
+    title.style.color = theme.text;
+    subtitle.style.color = theme.subtext;
+
+    $$(".menu-preview-section", targetPreview).forEach((section) => {
+      section.style.marginTop = `${26 * state.spacing}px`;
+
+      const heading = $("h3", section);
+      if (heading) {
+        heading.style.color = state.theme === "minimal" ? state.accent : theme.heading;
       }
+
+      $$(".menu-item", section).forEach((itemRow) => {
+        itemRow.style.borderBottom = `1px dashed ${theme.divider}`;
+        const itemName = $("span", itemRow);
+        const itemPrice = $("strong", itemRow);
+        if (itemName) itemName.style.color = theme.text;
+        if (itemPrice) itemPrice.style.color = theme.text;
+      });
     });
 
-    applyStyle(currentStyle);
-  }
+    badge.style.background = state.theme === "minimal" ? state.accent : theme.badgeBg;
+    badge.style.color = theme.badgeText;
 
-  function resetMenu() {
-    renderMenu(defaultMenu);
-    applyStyle("minimal");
-    highlightSelectedStyle("minimal");
-
-    if (formMessage) {
-      formMessage.textContent = "Preview reset to default sample menu.";
+    if (canvasMeta && targetPreview === editorPreview) {
+      canvasMeta.textContent = `${getPaperMeta()} · ${state.theme.charAt(0).toUpperCase() + state.theme.slice(1)}`;
     }
   }
 
-  function highlightSelectedStyle(styleName) {
-    styleCards.forEach((card) => {
-      card.style.outline = "none";
-      card.style.transform = "translateY(0)";
-      card.style.transition = "0.25s ease";
-    });
-
-    const map = {
-      minimal: 0,
-      artisan: 1,
-      bold: 2
-    };
-
-    const selectedCard = styleCards[map[styleName]];
-    if (selectedCard) {
-      selectedCard.style.outline = "3px solid rgba(90, 63, 44, 0.25)";
-      selectedCard.style.transform = "translateY(-4px)";
-    }
+  function renderAllPreviews() {
+    renderPreview(heroPreview);
+    renderPreview(editorPreview);
+    updateThemeButtons();
   }
 
-  function startGeneratorFlow() {
-    const cafeName = prompt("Enter your café name:", cafeNameInput?.value || "My Café");
-    if (cafeName === null) return;
+  function updateThemeButtons() {
+    themeButtons.forEach((btn) => {
+      btn.classList.toggle("active", btn.dataset.theme === state.theme);
+    });
+  }
 
-    const subtitle = prompt(
-      "Enter a short menu subtitle:",
-      "Seasonal Café Menu"
-    );
-    if (subtitle === null) return;
+  function syncControls() {
+    if (editorCafeName) editorCafeName.value = state.cafeName;
+    if (editorSubtitle) editorSubtitle.value = state.subtitle;
+    if (editorBadge) editorBadge.value = state.badge;
+    if (editorAccent) editorAccent.value = state.accent;
+    if (editorPaper) editorPaper.value = state.paper;
+    if (editorFontScale) editorFontScale.value = String(state.fontScale);
+    if (editorSpacing) editorSpacing.value = String(state.spacing);
+    if (editorWidth) editorWidth.value = String(state.width);
+  }
 
-    const sectionOneTitle = prompt("First menu section name:", "Coffee");
-    if (sectionOneTitle === null) return;
+  function buildSectionsEditor() {
+    if (!sectionsEditor) return;
 
-    const sectionOneItems = prompt(
-      "Enter items for the first section.\nUse this format:\nLatte-5.50, Cappuccino-4.80, Mocha-6.00",
-      "Flat White-4.80, Vanilla Latte-5.50, Cold Brew-4.90"
-    );
-    if (sectionOneItems === null) return;
+    sectionsEditor.innerHTML = "";
 
-    const sectionTwoTitle = prompt("Second menu section name:", "Pastries");
-    if (sectionTwoTitle === null) return;
+    state.sections.forEach((section, sectionIndex) => {
+      const card = document.createElement("div");
+      card.className = "section-card";
 
-    const sectionTwoItems = prompt(
-      "Enter items for the second section.\nUse this format:\nCroissant-3.90, Muffin-4.20, Lemon Loaf-4.00",
-      "Butter Croissant-3.90, Almond Danish-4.20, Lemon Loaf-4.00"
-    );
-    if (sectionTwoItems === null) return;
+      const header = document.createElement("div");
+      header.className = "section-card-header";
 
-    const styleChoice = prompt(
-      "Choose a style: minimal, artisan, or bold",
-      currentStyle
-    );
-    if (styleChoice === null) return;
+      const title = document.createElement("strong");
+      title.textContent = `Section ${sectionIndex + 1}`;
 
-    const menuData = {
-      cafeName: cafeName.trim() || "My Café",
-      subtitle: subtitle.trim() || "Seasonal Café Menu",
-      badge: "Ready to Print",
+      const removeSectionBtn = document.createElement("button");
+      removeSectionBtn.type = "button";
+      removeSectionBtn.className = "small-btn";
+      removeSectionBtn.textContent = "Delete";
+      removeSectionBtn.addEventListener("click", function () {
+        if (state.sections.length === 1) {
+          state.sections = [
+            {
+              title: "Menu",
+              items: [{ name: "Sample Item", price: "$0.00" }]
+            }
+          ];
+        } else {
+          state.sections.splice(sectionIndex, 1);
+        }
+
+        buildSectionsEditor();
+        renderAllPreviews();
+        setMessage("Section removed.");
+      });
+
+      header.appendChild(title);
+      header.appendChild(removeSectionBtn);
+      card.appendChild(header);
+
+      const sectionTitleGroup = document.createElement("div");
+      sectionTitleGroup.className = "form-group";
+
+      const sectionLabel = document.createElement("label");
+      sectionLabel.textContent = "Section title";
+
+      const sectionInput = document.createElement("input");
+      sectionInput.type = "text";
+      sectionInput.value = section.title;
+      sectionInput.addEventListener("input", function () {
+        state.sections[sectionIndex].title = this.value;
+        renderAllPreviews();
+      });
+
+      sectionTitleGroup.appendChild(sectionLabel);
+      sectionTitleGroup.appendChild(sectionInput);
+      card.appendChild(sectionTitleGroup);
+
+      section.items.forEach((item, itemIndex) => {
+        const row = document.createElement("div");
+        row.className = "item-row";
+
+        const nameInput = document.createElement("input");
+        nameInput.type = "text";
+        nameInput.value = item.name;
+        nameInput.placeholder = "Item name";
+        nameInput.addEventListener("input", function () {
+          state.sections[sectionIndex].items[itemIndex].name = this.value;
+          renderAllPreviews();
+        });
+
+        const priceInput = document.createElement("input");
+        priceInput.type = "text";
+        priceInput.value = item.price;
+        priceInput.placeholder = "$0.00";
+        priceInput.addEventListener("input", function () {
+          state.sections[sectionIndex].items[itemIndex].price = this.value;
+          renderAllPreviews();
+        });
+
+        const removeBtn = document.createElement("button");
+        removeBtn.type = "button";
+        removeBtn.textContent = "×";
+        removeBtn.addEventListener("click", function () {
+          state.sections[sectionIndex].items.splice(itemIndex, 1);
+
+          if (state.sections[sectionIndex].items.length === 0) {
+            state.sections[sectionIndex].items.push({
+              name: "New Item",
+              price: "$0.00"
+            });
+          }
+
+          buildSectionsEditor();
+          renderAllPreviews();
+          setMessage("Item removed.");
+        });
+
+        row.appendChild(nameInput);
+        row.appendChild(priceInput);
+        row.appendChild(removeBtn);
+        card.appendChild(row);
+      });
+
+      const actions = document.createElement("div");
+      actions.className = "section-actions";
+
+      const addItemBtn = document.createElement("button");
+      addItemBtn.type = "button";
+      addItemBtn.textContent = "+ Add item";
+      addItemBtn.addEventListener("click", function () {
+        state.sections[sectionIndex].items.push({
+          name: "New Item",
+          price: "$0.00"
+        });
+        buildSectionsEditor();
+        renderAllPreviews();
+        setMessage("New item added.");
+      });
+
+      const duplicateSectionBtn = document.createElement("button");
+      duplicateSectionBtn.type = "button";
+      duplicateSectionBtn.textContent = "Duplicate section";
+      duplicateSectionBtn.addEventListener("click", function () {
+        const newSection = JSON.parse(JSON.stringify(state.sections[sectionIndex]));
+        state.sections.splice(sectionIndex + 1, 0, newSection);
+        buildSectionsEditor();
+        renderAllPreviews();
+        setMessage("Section duplicated.");
+      });
+
+      actions.appendChild(addItemBtn);
+      actions.appendChild(duplicateSectionBtn);
+      card.appendChild(actions);
+
+      sectionsEditor.appendChild(card);
+    });
+  }
+
+  function loadPremiumDemo() {
+    state = {
+      cafeName: "STONE & STEAM",
+      subtitle: "Signature Drinks & Bakery",
+      badge: "Ready for Print",
+      theme: "editorial",
+      accent: "#1f1a17",
+      fontScale: 1.04,
+      spacing: 1.03,
+      width: 430,
+      paper: "a4",
       sections: [
         {
-          title: sectionOneTitle.trim() || "Coffee",
-          items: parseItems(sectionOneItems)
+          title: "Espresso Bar",
+          items: [
+            { name: "Cortado", price: "$4.60" },
+            { name: "Vanilla Oat Latte", price: "$5.90" },
+            { name: "Cold Brew", price: "$4.90" }
+          ]
         },
         {
-          title: sectionTwoTitle.trim() || "Pastries",
-          items: parseItems(sectionTwoItems)
+          title: "Bakery",
+          items: [
+            { name: "Butter Croissant", price: "$3.80" },
+            { name: "Cardamom Bun", price: "$4.50" },
+            { name: "Lemon Loaf", price: "$4.20" }
+          ]
+        },
+        {
+          title: "Seasonal",
+          items: [
+            { name: "Rose Pistachio Latte", price: "$6.20" },
+            { name: "Orange Mocha", price: "$6.40" }
+          ]
         }
       ]
     };
 
-    renderMenu(menuData);
-
-    const cleanedStyle = styleChoice.trim().toLowerCase();
-    if (cleanedStyle === "artisan") {
-      applyStyle("artisan");
-      highlightSelectedStyle("artisan");
-    } else if (cleanedStyle === "bold") {
-      applyStyle("bold");
-      highlightSelectedStyle("bold");
-    } else {
-      applyStyle("minimal");
-      highlightSelectedStyle("minimal");
-    }
-
-    // Fill form automatically too
-    if (cafeNameInput) cafeNameInput.value = menuData.cafeName;
-    if (messageInput) {
-      messageInput.value =
-        `Please create a print-ready menu for ${menuData.cafeName}.\n` +
-        `Style: ${cleanedStyle}\n` +
-        `${menuData.sections[0].title}: ${sectionOneItems}\n` +
-        `${menuData.sections[1].title}: ${sectionTwoItems}`;
-    }
-
-    if (formMessage) {
-      formMessage.textContent =
-        "Your live preview has been generated. You can now print or save it as PDF.";
-    }
-
-    // Scroll to hero preview nicely
-    const heroSection = document.getElementById("hero");
-    if (heroSection) {
-      heroSection.scrollIntoView({ behavior: "smooth" });
-    }
+    syncControls();
+    buildSectionsEditor();
+    renderAllPreviews();
+    setMessage("Premium demo loaded.");
   }
 
-  function printMenu() {
-    if (formMessage) {
-      formMessage.textContent =
-        "Print window opening. On iPad, choose Print and then Save as PDF if available.";
-    }
-    window.print();
+  if (editorCafeName) {
+    editorCafeName.addEventListener("input", function () {
+      state.cafeName = this.value || "My Café";
+      renderAllPreviews();
+    });
   }
 
-  // -----------------------------
-  // Add generator buttons dynamically
-  // -----------------------------
-  function createGeneratorButtons() {
-    if (!heroButtons) return;
-
-    const generateBtn = document.createElement("button");
-    generateBtn.textContent = "Generate Demo Menu";
-    generateBtn.className = "btn";
-    generateBtn.type = "button";
-
-    const printBtn = document.createElement("button");
-    printBtn.textContent = "Print / Save PDF";
-    printBtn.className = "btn btn-secondary";
-    printBtn.type = "button";
-
-    const resetBtn = document.createElement("button");
-    resetBtn.textContent = "Reset Preview";
-    resetBtn.className = "btn btn-secondary";
-    resetBtn.type = "button";
-
-    heroButtons.appendChild(generateBtn);
-    heroButtons.appendChild(printBtn);
-    heroButtons.appendChild(resetBtn);
-
-    generateBtn.addEventListener("click", startGeneratorFlow);
-    printBtn.addEventListener("click", printMenu);
-    resetBtn.addEventListener("click", resetMenu);
+  if (editorSubtitle) {
+    editorSubtitle.addEventListener("input", function () {
+      state.subtitle = this.value || "Seasonal Café Menu";
+      renderAllPreviews();
+    });
   }
 
-  // -----------------------------
-  // Pricing buttons fill plan in form
-  // -----------------------------
+  if (editorBadge) {
+    editorBadge.addEventListener("input", function () {
+      state.badge = this.value || "Print Ready PDF";
+      renderAllPreviews();
+    });
+  }
+
+  if (editorAccent) {
+    editorAccent.addEventListener("input", function () {
+      state.accent = this.value;
+      renderAllPreviews();
+    });
+  }
+
+  if (editorPaper) {
+    editorPaper.addEventListener("change", function () {
+      state.paper = this.value;
+
+      if (this.value === "letter") state.width = 440;
+      if (this.value === "a4") state.width = 420;
+      if (this.value === "square") state.width = 390;
+
+      syncControls();
+      renderAllPreviews();
+      setMessage("Paper size updated.");
+    });
+  }
+
+  if (editorFontScale) {
+    editorFontScale.addEventListener("input", function () {
+      state.fontScale = Number(this.value);
+      renderAllPreviews();
+    });
+  }
+
+  if (editorSpacing) {
+    editorSpacing.addEventListener("input", function () {
+      state.spacing = Number(this.value);
+      renderAllPreviews();
+    });
+  }
+
+  if (editorWidth) {
+    editorWidth.addEventListener("input", function () {
+      state.width = Number(this.value);
+      renderAllPreviews();
+    });
+  }
+
+  themeButtons.forEach((btn) => {
+    btn.addEventListener("click", function () {
+      state.theme = this.dataset.theme;
+      renderAllPreviews();
+      updateThemeButtons();
+      setMessage(`Theme changed to ${state.theme}.`);
+    });
+  });
+
+  if (addSectionBtn) {
+    addSectionBtn.addEventListener("click", function () {
+      state.sections.push({
+        title: "New Section",
+        items: [
+          { name: "New Item", price: "$0.00" }
+        ]
+      });
+      buildSectionsEditor();
+      renderAllPreviews();
+      setMessage("New section added.");
+    });
+  }
+
+  if (loadDemoBtn) {
+    loadDemoBtn.addEventListener("click", function () {
+      loadPremiumDemo();
+    });
+  }
+
+  if (duplicateSampleBtn) {
+    duplicateSampleBtn.addEventListener("click", function () {
+      if (!state.sections.length) return;
+
+      state.sections.forEach((section) => {
+        const copiedItems = section.items.map((item) => ({
+          name: `${item.name} Special`,
+          price: item.price
+        }));
+        section.items = section.items.concat(copiedItems);
+      });
+
+      buildSectionsEditor();
+      renderAllPreviews();
+      setMessage("Sample items duplicated.");
+    });
+  }
+
+  if (printBtn) {
+    printBtn.addEventListener("click", function () {
+      setMessage("Opening print view. Use Save as PDF from your browser print options.");
+      window.print();
+    });
+  }
+
+  if (resetBtn) {
+    resetBtn.addEventListener("click", function () {
+      state = JSON.parse(JSON.stringify(defaultState));
+      syncControls();
+      buildSectionsEditor();
+      renderAllPreviews();
+      setMessage("Sample menu restored.");
+    });
+  }
+
+  if (fillContactBtn) {
+    fillContactBtn.addEventListener("click", function () {
+      if (cafeInput) cafeInput.value = state.cafeName;
+      if (planInput) planInput.value = "Signature";
+
+      if (messageInput) {
+        const summary = state.sections
+          .map((section) => {
+            const items = section.items.map((item) => `${item.name} ${item.price}`).join(", ");
+            return `${section.title}: ${items}`;
+          })
+          .join("\n");
+
+        messageInput.value =
+          `Please create a print-ready menu for ${state.cafeName}.\n` +
+          `Theme: ${state.theme}\n` +
+          `Subtitle: ${state.subtitle}\n` +
+          `${summary}`;
+      }
+
+      document.getElementById("contact").scrollIntoView({ behavior: "smooth" });
+      setMessage("Contact form filled from the editor.");
+    });
+  }
+
   pricingButtons.forEach((button) => {
     button.addEventListener("click", function () {
       const card = this.closest(".pricing-card");
-      const planTitle = card ? card.querySelector("h3")?.textContent : "";
+      const title = $("h3", card);
+      const plan = title ? title.textContent.trim() : "Signature";
 
-      if (planInput && planTitle) {
-        planInput.value = planTitle;
-      }
+      if (planInput) planInput.value = plan;
 
-      if (formMessage) {
-        formMessage.textContent = `${planTitle} plan selected. Fill out the form below or generate a demo menu.`;
-      }
+      if (plan === "Starter") state.theme = "minimal";
+      if (plan === "Signature") state.theme = "artisan";
+      if (plan === "Seasonal") state.theme = "editorial";
+
+      renderAllPreviews();
+      updateThemeButtons();
+      setMessage(`${plan} plan selected.`);
     });
   });
 
-  // -----------------------------
-  // Style cards clickable
-  // -----------------------------
-  styleCards.forEach((card, index) => {
-    card.style.cursor = "pointer";
-
-    card.addEventListener("click", function () {
-      if (index === 0) {
-        applyStyle("minimal");
-        highlightSelectedStyle("minimal");
-      } else if (index === 1) {
-        applyStyle("artisan");
-        highlightSelectedStyle("artisan");
-      } else {
-        applyStyle("bold");
-        highlightSelectedStyle("bold");
-      }
-
-      if (formMessage) {
-        formMessage.textContent = "Style selected. Now click “Generate Demo Menu” to build your menu preview.";
-      }
-    });
-  });
-
-  // -----------------------------
-  // Make contact form useful
-  // Instead of only showing a thank-you,
-  // it also updates the preview.
-  // -----------------------------
   if (contactForm) {
     contactForm.addEventListener("submit", function (event) {
       event.preventDefault();
 
-      const cafeName = cafeNameInput?.value?.trim() || "My Café";
-      const plan = planInput?.value?.trim() || "Starter";
-      const ownerName = nameInput?.value?.trim() || "Owner";
-      const notes = messageInput?.value?.trim() || "";
+      const ownerName = nameInput ? nameInput.value.trim() : "Owner";
+      const cafeName = cafeInput ? cafeInput.value.trim() : state.cafeName;
+      const plan = planInput ? planInput.value.trim() : "Signature";
 
-      const generatedMenu = {
-        cafeName: cafeName,
-        subtitle: plan + " Menu Draft",
-        badge: "Draft Ready",
-        sections: [
-          {
-            title: "Signature Drinks",
-            items: [
-              { name: "House Latte", price: "$5.20" },
-              { name: "Caramel Cappuccino", price: "$5.60" },
-              { name: "Iced Mocha", price: "$5.90" }
-            ]
-          },
-          {
-            title: "Bakery",
-            items: [
-              { name: "Butter Croissant", price: "$3.90" },
-              { name: "Blueberry Muffin", price: "$4.10" },
-              { name: "Banana Bread", price: "$4.30" }
-            ]
-          }
-        ]
-      };
+      if (cafeName) {
+        state.cafeName = cafeName;
+        if (editorCafeName) editorCafeName.value = cafeName;
+      }
 
-      renderMenu(generatedMenu);
+      if (plan === "Starter") state.theme = "minimal";
+      if (plan === "Signature") state.theme = "artisan";
+      if (plan === "Seasonal") state.theme = "editorial";
+
+      renderAllPreviews();
+      updateThemeButtons();
 
       if (formMessage) {
         formMessage.textContent =
-          `Thanks ${ownerName}. Your sample menu preview has been updated for ${cafeName}. Use “Print / Save PDF” to export it.`;
+          `Thanks ${ownerName}. Your menu preview has been updated for ${state.cafeName}.`;
       }
 
-      console.log("Form details:", {
+      console.log("Contact form submitted:", {
         ownerName,
-        email: emailInput?.value,
+        email: emailInput ? emailInput.value.trim() : "",
         cafeName,
         plan,
-        notes
+        message: messageInput ? messageInput.value.trim() : ""
       });
     });
   }
 
-  // -----------------------------
-  // Add print styles dynamically
-  // -----------------------------
-  function injectPrintStyles() {
-    const style = document.createElement("style");
-    style.innerHTML = `
-      @media print {
-        body * {
-          visibility: hidden;
-        }
-
-        .menu-preview,
-        .menu-preview * {
-          visibility: visible;
-        }
-
-        .menu-preview {
-          position: absolute;
-          left: 0;
-          top: 0;
-          width: 100%;
-          max-width: 100%;
-          border-radius: 0;
-          box-shadow: none;
-          padding: 30px;
-          margin: 0;
-        }
-      }
-    `;
-    document.head.appendChild(style);
-  }
-
-  // -----------------------------
-  // Init
-  // -----------------------------
-  createGeneratorButtons();
-  injectPrintStyles();
-  renderMenu(defaultMenu);
-  applyStyle("minimal");
-  highlightSelectedStyle("minimal");
+  syncControls();
+  buildSectionsEditor();
+  renderAllPreviews();
 });

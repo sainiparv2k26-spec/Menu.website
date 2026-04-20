@@ -1,14 +1,12 @@
-<link rel="stylesheet" href="style.css" />
-<script src="script.js"></script>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MenuCraft Studio | Print-Ready Café Menus</title>
+  <title>MenuCraft Studio | Café Menu Editor</title>
   <meta
     name="description"
-    content="MenuCraft Studio helps café owners create stylish print-ready menus quickly."
+    content="Create stylish print-ready café menus quickly with a clean live editor."
   />
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -26,40 +24,39 @@
       <nav class="nav-links" id="navLinks">
         <a href="#about">About</a>
         <a href="#features">Features</a>
-        <a href="#process">How It Works</a>
-        <a href="#styles">Menu Styles</a>
+        <a href="#editor">Editor</a>
         <a href="#pricing">Pricing</a>
-        <a href="#contact" class="btn btn-sm">Book a Menu</a>
+        <a href="#contact" class="btn btn-sm">Start Now</a>
       </nav>
     </div>
   </header>
 
   <main>
-    <!-- Hero Section -->
+    <!-- HERO -->
     <section class="hero section" id="hero">
       <div class="container hero-grid">
         <div class="hero-text">
           <p class="eyebrow">Made for café owners</p>
-          <h1>Stylish print-ready menus, created fast.</h1>
+          <h1>Create premium print-ready menus in minutes.</h1>
           <p class="hero-subtext">
-            We help cafés turn rough ideas into polished menus that feel premium,
-            match the brand, and are ready to print or share digitally.
+            Design your café menu with a clean live editor, polished templates,
+            and an instant print layout made for modern coffee brands.
           </p>
 
           <div class="hero-buttons">
-            <a href="#pricing" class="btn">View Plans</a>
-            <a href="#contact" class="btn btn-secondary">Start Your Menu</a>
+            <a href="#editor" class="btn">Open Live Editor</a>
+            <a href="#pricing" class="btn btn-secondary">View Plans</a>
           </div>
 
           <div class="hero-points">
-            <span>Fast turnaround</span>
-            <span>Print-ready layouts</span>
-            <span>Clean café aesthetic</span>
+            <span>Live menu preview</span>
+            <span>Clean premium templates</span>
+            <span>Print-ready export</span>
           </div>
         </div>
 
         <div class="hero-card">
-          <div class="menu-preview">
+          <div class="menu-preview" id="heroMenuPreview">
             <div class="menu-preview-top">
               <p>RIVER & BEAN</p>
               <span>Seasonal Café Menu</span>
@@ -67,34 +64,16 @@
 
             <div class="menu-preview-section">
               <h3>Coffee</h3>
-              <div class="menu-item">
-                <span>Flat White</span>
-                <strong>$4.80</strong>
-              </div>
-              <div class="menu-item">
-                <span>Vanilla Latte</span>
-                <strong>$5.50</strong>
-              </div>
-              <div class="menu-item">
-                <span>Cold Brew</span>
-                <strong>$4.90</strong>
-              </div>
+              <div class="menu-item"><span>Flat White</span><strong>$4.80</strong></div>
+              <div class="menu-item"><span>Vanilla Latte</span><strong>$5.50</strong></div>
+              <div class="menu-item"><span>Cold Brew</span><strong>$4.90</strong></div>
             </div>
 
             <div class="menu-preview-section">
               <h3>Pastries</h3>
-              <div class="menu-item">
-                <span>Butter Croissant</span>
-                <strong>$3.90</strong>
-              </div>
-              <div class="menu-item">
-                <span>Almond Danish</span>
-                <strong>$4.20</strong>
-              </div>
-              <div class="menu-item">
-                <span>Lemon Loaf</span>
-                <strong>$4.00</strong>
-              </div>
+              <div class="menu-item"><span>Butter Croissant</span><strong>$3.90</strong></div>
+              <div class="menu-item"><span>Almond Danish</span><strong>$4.20</strong></div>
+              <div class="menu-item"><span>Lemon Loaf</span><strong>$4.00</strong></div>
             </div>
 
             <div class="menu-badge">Print Ready PDF</div>
@@ -103,156 +82,202 @@
       </div>
     </section>
 
-    <!-- About Section -->
+    <!-- ABOUT -->
     <section class="section light-section" id="about">
       <div class="container split-grid">
         <div>
           <p class="eyebrow">About the service</p>
-          <h2>Designed to make your café look as good as it feels.</h2>
+          <h2>Built for cafés that want to look polished without wasting time.</h2>
         </div>
         <div>
           <p>
-            MenuCraft Studio is a simple design service for café owners who want a
-            refined menu without spending days adjusting fonts, spacing, and layout.
+            MenuCraft Studio helps café owners create beautiful menus with better
+            spacing, stronger hierarchy, and a cleaner customer experience.
           </p>
           <p>
-            Whether you are opening a new café, refreshing your seasonal menu, or
-            updating prices, we create clear and elegant menus that feel premium and
-            are ready for print.
+            Instead of fighting with layout tools, you can edit content, choose
+            a template, and prepare a professional menu that is ready for print.
           </p>
         </div>
       </div>
     </section>
 
-    <!-- Features Section -->
+    <!-- FEATURES -->
     <section class="section" id="features">
       <div class="container">
         <div class="section-heading">
           <p class="eyebrow">Features</p>
-          <h2>Everything café owners need for a polished menu.</h2>
+          <h2>A modern menu workflow, simplified.</h2>
         </div>
 
         <div class="cards-grid">
           <article class="feature-card">
-            <h3>Brand-aligned design</h3>
-            <p>
-              Menus styled to match your café’s mood, from minimal and modern to warm
-              and artisan.
-            </p>
+            <h3>Live editing</h3>
+            <p>Edit titles, sections, prices, and layout in one smooth workspace.</p>
           </article>
-
           <article class="feature-card">
-            <h3>Print-ready files</h3>
-            <p>
-              Clean layouts prepared for easy printing, display boards, or table menus.
-            </p>
+            <h3>Template styles</h3>
+            <p>Choose from refined looks made for premium cafés and modern coffee brands.</p>
           </article>
-
           <article class="feature-card">
-            <h3>Fast revisions</h3>
-            <p>
-              Need a quick price update or seasonal change? We make edits simple and efficient.
-            </p>
+            <h3>Print layout</h3>
+            <p>Create a clean single-page design that is easy to print and share.</p>
           </article>
-
           <article class="feature-card">
-            <h3>Mobile-friendly preview</h3>
-            <p>
-              Review your menu on phone or tablet before sending it to print.
-            </p>
+            <h3>Easy revisions</h3>
+            <p>Update seasonal drinks, pricing, and bakery items without rebuilding everything.</p>
           </article>
-
           <article class="feature-card">
-            <h3>Simple process</h3>
-            <p>
-              Send your items, prices, and style direction. We handle the layout and presentation.
-            </p>
+            <h3>Mobile-friendly editor</h3>
+            <p>Works well on iPad, tablet, laptop, and desktop with a responsive layout.</p>
           </article>
-
           <article class="feature-card">
-            <h3>Professional finish</h3>
-            <p>
-              Better spacing, hierarchy, and readability so customers can order with ease.
-            </p>
+            <h3>Beginner-friendly</h3>
+            <p>Simple controls, clear labels, and no framework setup needed.</p>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- How It Works -->
-    <section class="section light-section" id="process">
+    <!-- EDITOR -->
+    <section class="section light-section" id="editor">
       <div class="container">
         <div class="section-heading">
-          <p class="eyebrow">How it works</p>
-          <h2>From rough list to ready-to-print menu in four easy steps.</h2>
+          <p class="eyebrow">Live editor</p>
+          <h2>Design your menu with a real editor layout.</h2>
         </div>
 
-        <div class="steps-grid">
-          <div class="step-card">
-            <span class="step-number">01</span>
-            <h3>Send your menu details</h3>
-            <p>Share your items, prices, categories, and any brand inspiration.</p>
-          </div>
+        <div class="editor-layout">
+          <!-- SIDEBAR -->
+          <aside class="editor-sidebar">
+            <div class="editor-panel">
+              <h3>Brand</h3>
 
-          <div class="step-card">
-            <span class="step-number">02</span>
-            <h3>Choose your style</h3>
-            <p>Pick a modern, classic, minimal, or signature café-inspired look.</p>
-          </div>
+              <div class="form-group">
+                <label for="editorCafeName">Café name</label>
+                <input type="text" id="editorCafeName" value="RIVER & BEAN" />
+              </div>
 
-          <div class="step-card">
-            <span class="step-number">03</span>
-            <h3>We design your menu</h3>
-            <p>We create a clean layout with refined typography and strong visual balance.</p>
-          </div>
+              <div class="form-group">
+                <label for="editorSubtitle">Subtitle</label>
+                <input type="text" id="editorSubtitle" value="Seasonal Café Menu" />
+              </div>
 
-          <div class="step-card">
-            <span class="step-number">04</span>
-            <h3>Receive your final files</h3>
-            <p>Get a polished menu ready for print, sharing, or in-store display.</p>
+              <div class="form-group">
+                <label for="editorBadge">Badge label</label>
+                <input type="text" id="editorBadge" value="Print Ready PDF" />
+              </div>
+            </div>
+
+            <div class="editor-panel">
+              <h3>Template</h3>
+              <div class="theme-grid" id="themeButtons">
+                <button type="button" class="theme-btn active" data-theme="minimal">Minimal</button>
+                <button type="button" class="theme-btn" data-theme="artisan">Artisan</button>
+                <button type="button" class="theme-btn" data-theme="bold">Bold</button>
+                <button type="button" class="theme-btn" data-theme="editorial">Editorial</button>
+              </div>
+            </div>
+
+            <div class="editor-panel">
+              <h3>Design Controls</h3>
+
+              <div class="form-group">
+                <label for="editorAccent">Accent color</label>
+                <input type="color" id="editorAccent" value="#5a3f2c" />
+              </div>
+
+              <div class="form-group">
+                <label for="editorPaper">Paper size</label>
+                <select id="editorPaper">
+                  <option value="a4">A4</option>
+                  <option value="letter">Letter</option>
+                  <option value="square">Square</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="editorFontScale">Font scale</label>
+                <input type="range" id="editorFontScale" min="0.85" max="1.35" step="0.01" value="1" />
+              </div>
+
+              <div class="form-group">
+                <label for="editorSpacing">Spacing</label>
+                <input type="range" id="editorSpacing" min="0.85" max="1.40" step="0.01" value="1" />
+              </div>
+
+              <div class="form-group">
+                <label for="editorWidth">Menu width</label>
+                <input type="range" id="editorWidth" min="340" max="540" step="2" value="420" />
+              </div>
+            </div>
+
+            <div class="editor-panel">
+              <div class="panel-header-row">
+                <h3>Menu Sections</h3>
+                <button type="button" class="small-btn" id="addSectionBtn">+ Add</button>
+              </div>
+
+              <div id="sectionsEditor"></div>
+            </div>
+
+            <div class="editor-panel">
+              <h3>Actions</h3>
+              <div class="action-grid">
+                <button type="button" class="btn btn-full" id="loadDemoBtn">Load Premium Demo</button>
+                <button type="button" class="btn btn-secondary btn-full" id="printBtn">Print / Save PDF</button>
+                <button type="button" class="btn btn-secondary btn-full" id="resetBtn">Reset Sample</button>
+                <button type="button" class="btn btn-secondary btn-full" id="fillContactBtn">Fill Contact Form</button>
+              </div>
+              <p class="editor-note" id="editorMessage">Your menu updates live as you edit.</p>
+            </div>
+          </aside>
+
+          <!-- CANVAS -->
+          <div class="editor-canvas-wrap">
+            <div class="editor-toolbar">
+              <div class="toolbar-left">
+                <span class="canvas-status">Live Preview</span>
+                <span class="canvas-meta" id="canvasMeta">A4 · Minimal</span>
+              </div>
+              <div class="toolbar-right">
+                <button type="button" class="toolbar-btn" id="duplicateSampleBtn">Duplicate Sample Items</button>
+              </div>
+            </div>
+
+            <div class="canvas-surface">
+              <div class="menu-canvas" id="printArea">
+                <div class="menu-preview editor-menu-preview" id="editorMenuPreview">
+                  <div class="menu-preview-top">
+                    <p>RIVER & BEAN</p>
+                    <span>Seasonal Café Menu</span>
+                  </div>
+
+                  <div class="menu-preview-section">
+                    <h3>Coffee</h3>
+                    <div class="menu-item"><span>Flat White</span><strong>$4.80</strong></div>
+                    <div class="menu-item"><span>Vanilla Latte</span><strong>$5.50</strong></div>
+                    <div class="menu-item"><span>Cold Brew</span><strong>$4.90</strong></div>
+                  </div>
+
+                  <div class="menu-preview-section">
+                    <h3>Pastries</h3>
+                    <div class="menu-item"><span>Butter Croissant</span><strong>$3.90</strong></div>
+                    <div class="menu-item"><span>Almond Danish</span><strong>$4.20</strong></div>
+                    <div class="menu-item"><span>Lemon Loaf</span><strong>$4.00</strong></div>
+                  </div>
+
+                  <div class="menu-badge">Print Ready PDF</div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Sample Menu Styles -->
-    <section class="section" id="styles">
-      <div class="container">
-        <div class="section-heading">
-          <p class="eyebrow">Sample menu styles</p>
-          <h2>Choose the mood that fits your café.</h2>
-        </div>
-
-        <div class="styles-grid">
-          <article class="style-card">
-            <div class="style-top style-one"></div>
-            <div class="style-content">
-              <h3>Minimal Cream</h3>
-              <p>Soft neutrals, elegant type, and a calm modern look for premium cafés.</p>
-            </div>
-          </article>
-
-          <article class="style-card">
-            <div class="style-top style-two"></div>
-            <div class="style-content">
-              <h3>Warm Artisan</h3>
-              <p>Rich café tones and inviting layouts with a handcrafted feel.</p>
-            </div>
-          </article>
-
-          <article class="style-card">
-            <div class="style-top style-three"></div>
-            <div class="style-content">
-              <h3>Bold Modern</h3>
-              <p>Clear structure, strong contrast, and a sleek design for busy spaces.</p>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- Pricing -->
-    <section class="section light-section" id="pricing">
+    <!-- PRICING -->
+    <section class="section" id="pricing">
       <div class="container">
         <div class="section-heading">
           <p class="eyebrow">Pricing</p>
@@ -263,14 +288,14 @@
           <article class="pricing-card">
             <h3>Starter</h3>
             <p class="price">$49</p>
-            <p class="plan-text">Perfect for one simple café menu.</p>
+            <p class="plan-text">Perfect for one clean café menu.</p>
             <ul>
               <li>1 menu page</li>
               <li>1 design style</li>
-              <li>Print-ready PDF</li>
+              <li>Print-ready layout</li>
               <li>1 revision</li>
             </ul>
-            <a href="#contact" class="btn btn-full">Choose Starter</a>
+            <button type="button" class="btn btn-full pricing-select">Choose Starter</button>
           </article>
 
           <article class="pricing-card featured-plan">
@@ -280,38 +305,38 @@
             <p class="plan-text">Best for cafés that want a refined branded menu.</p>
             <ul>
               <li>Up to 3 menu pages</li>
-              <li>2 design concepts</li>
-              <li>Print-ready PDF</li>
+              <li>2 style directions</li>
+              <li>Print-ready layout</li>
               <li>2 revisions</li>
             </ul>
-            <a href="#contact" class="btn btn-full">Choose Signature</a>
+            <button type="button" class="btn btn-full pricing-select">Choose Signature</button>
           </article>
 
           <article class="pricing-card">
             <h3>Seasonal</h3>
             <p class="price">$149</p>
-            <p class="plan-text">Ideal for cafés with rotating drinks and seasonal updates.</p>
+            <p class="plan-text">Ideal for cafés with rotating drinks and fresh updates.</p>
             <ul>
               <li>Up to 5 menu pages</li>
               <li>Priority turnaround</li>
-              <li>Seasonal update support</li>
+              <li>Seasonal support</li>
               <li>3 revisions</li>
             </ul>
-            <a href="#contact" class="btn btn-full">Choose Seasonal</a>
+            <button type="button" class="btn btn-full pricing-select">Choose Seasonal</button>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- Contact Form -->
-    <section class="section" id="contact">
+    <!-- CONTACT -->
+    <section class="section light-section" id="contact">
       <div class="container contact-grid">
         <div class="contact-text">
           <p class="eyebrow">Contact</p>
-          <h2>Ready to upgrade your café menu?</h2>
+          <h2>Ready to turn your menu into something polished?</h2>
           <p>
-            Tell us about your café, your menu, and the style you want. We will help
-            you create something clean, premium, and ready to use.
+            Tell us about your café and we will help you refine the final layout,
+            style direction, and print-ready finish.
           </p>
           <div class="contact-notes">
             <span>Fast replies</span>
@@ -351,7 +376,7 @@
               id="message"
               name="message"
               rows="5"
-              placeholder="We need a new drinks menu with a warm modern look..."
+              placeholder="We want a clean drinks menu with a warm premium style..."
               required
             ></textarea>
           </div>
@@ -367,13 +392,13 @@
     <div class="container footer-content">
       <div>
         <h3>MenuCraft Studio</h3>
-        <p>Stylish print-ready menus for modern cafés.</p>
+        <p>Premium print-ready menus for modern cafés.</p>
       </div>
 
       <div class="footer-links">
         <a href="#about">About</a>
         <a href="#features">Features</a>
-        <a href="#pricing">Pricing</a>
+        <a href="#editor">Editor</a>
         <a href="#contact">Contact</a>
       </div>
     </div>

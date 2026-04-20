@@ -1,10 +1,7 @@
-/* ------------------------------
-   Base Styles
------------------------------- */
 :root {
   --bg: #f7f2ea;
   --bg-soft: #fbf8f3;
-  --card: rgba(255, 255, 255, 0.74);
+  --card: rgba(255, 255, 255, 0.82);
   --text: #1f1a17;
   --muted: #6d6259;
   --accent: #5a3f2c;
@@ -34,14 +31,16 @@ body {
   line-height: 1.6;
 }
 
-img {
-  max-width: 100%;
-  display: block;
-}
-
 a {
   color: inherit;
   text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
 }
 
 .container {
@@ -54,7 +53,7 @@ a {
 }
 
 .light-section {
-  background: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.34);
   backdrop-filter: blur(8px);
 }
 
@@ -92,19 +91,15 @@ h2 {
 }
 
 h3 {
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   margin-bottom: 10px;
 }
 
 p {
   margin-top: 0;
   color: var(--muted);
-  font-size: 1rem;
 }
 
-/* ------------------------------
-   Header / Navigation
------------------------------- */
 .site-header {
   position: sticky;
   top: 0;
@@ -161,9 +156,6 @@ p {
   border-radius: 10px;
 }
 
-/* ------------------------------
-   Buttons
------------------------------- */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -176,6 +168,7 @@ p {
   border: 1px solid transparent;
   box-shadow: 0 10px 24px rgba(90, 63, 44, 0.18);
   transition: transform 0.2s ease, background 0.25s ease;
+  cursor: pointer;
 }
 
 .btn:hover {
@@ -202,9 +195,6 @@ p {
   width: 100%;
 }
 
-/* ------------------------------
-   Hero
------------------------------- */
 .hero {
   padding-top: 72px;
 }
@@ -234,7 +224,9 @@ p {
   gap: 12px;
 }
 
-.hero-points span {
+.hero-points span,
+.contact-notes span,
+.canvas-status {
   background: rgba(255, 255, 255, 0.7);
   border: 1px solid var(--border);
   padding: 10px 14px;
@@ -256,6 +248,7 @@ p {
   padding: 28px;
   box-shadow: var(--shadow);
   position: relative;
+  transition: 0.25s ease;
 }
 
 .menu-preview-top p {
@@ -288,11 +281,6 @@ p {
   border-bottom: 1px dashed rgba(90, 63, 44, 0.15);
 }
 
-.menu-item span,
-.menu-item strong {
-  font-size: 0.96rem;
-}
-
 .menu-badge {
   margin-top: 24px;
   display: inline-block;
@@ -304,19 +292,12 @@ p {
   font-weight: 700;
 }
 
-/* ------------------------------
-   Split Section
------------------------------- */
 .split-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 42px;
-  align-items: start;
 }
 
-/* ------------------------------
-   Cards / Features
------------------------------- */
 .cards-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -324,10 +305,11 @@ p {
 }
 
 .feature-card,
-.step-card,
-.style-card,
 .pricing-card,
-.contact-form {
+.contact-form,
+.editor-panel,
+.editor-toolbar,
+.canvas-surface {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -338,74 +320,199 @@ p {
   padding: 28px;
 }
 
-.feature-card p {
-  margin-bottom: 0;
-}
-
-/* ------------------------------
-   Steps
------------------------------- */
-.steps-grid {
+.editor-layout {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-}
-
-.step-card {
-  padding: 26px;
-}
-
-.step-number {
-  display: inline-block;
-  margin-bottom: 18px;
-  font-size: 0.9rem;
-  font-weight: 800;
-  color: var(--accent-light);
-  letter-spacing: 0.08em;
-}
-
-/* ------------------------------
-   Styles
------------------------------- */
-.styles-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 390px 1fr;
   gap: 24px;
+  align-items: start;
 }
 
-.style-card {
-  overflow: hidden;
+.editor-sidebar {
+  display: grid;
+  gap: 18px;
+  position: sticky;
+  top: 96px;
 }
 
-.style-top {
-  height: 180px;
+.editor-panel {
+  padding: 20px;
 }
 
-.style-one {
+.panel-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.small-btn,
+.toolbar-btn {
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--text);
+  border-radius: 12px;
+  padding: 10px 12px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.small-btn:hover,
+.toolbar-btn:hover {
+  background: #fff;
+}
+
+.theme-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.theme-btn {
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.86);
+  border-radius: 14px;
+  padding: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.theme-btn.active {
+  outline: 2px solid rgba(90, 63, 44, 0.24);
+  transform: translateY(-2px);
+}
+
+.editor-canvas-wrap {
+  display: grid;
+  gap: 16px;
+}
+
+.editor-toolbar {
+  padding: 14px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.toolbar-left,
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.canvas-meta {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.canvas-surface {
+  min-height: 760px;
+  padding: 28px;
   background:
-    linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0)),
-    linear-gradient(135deg, #f6efe5, #e8d9c8);
+    linear-gradient(180deg, rgba(255,255,255,0.65), rgba(255,255,255,0.48));
 }
 
-.style-two {
-  background:
-    linear-gradient(135deg, rgba(255,255,255,0.14), rgba(255,255,255,0)),
-    linear-gradient(135deg, #6a4b39, #c08b61);
+.menu-canvas {
+  min-height: 700px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
 }
 
-.style-three {
-  background:
-    linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0)),
-    linear-gradient(135deg, #292521, #8f6c4b);
+.editor-menu-preview {
+  width: min(100%, 420px);
 }
 
-.style-content {
-  padding: 24px;
+.form-group {
+  margin-bottom: 18px;
 }
 
-/* ------------------------------
-   Pricing
------------------------------- */
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 14px 15px;
+  border-radius: 14px;
+  border: 1px solid rgba(31, 26, 23, 0.12);
+  background: rgba(255, 255, 255, 0.88);
+  color: var(--text);
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: rgba(90, 63, 44, 0.45);
+  box-shadow: 0 0 0 3px rgba(90, 63, 44, 0.08);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 130px;
+}
+
+.editor-note,
+.form-message {
+  margin-top: 14px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.section-card {
+  border: 1px solid rgba(31, 26, 23, 0.08);
+  border-radius: 16px;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.82);
+  margin-bottom: 14px;
+}
+
+.section-card-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+}
+
+.item-row {
+  display: grid;
+  grid-template-columns: 1fr 110px 42px;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.item-row button,
+.section-actions button {
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.88);
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.item-row button {
+  padding: 0;
+}
+
+.section-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 10px;
+}
+
 .pricing-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -441,10 +548,6 @@ p {
   margin-bottom: 10px;
 }
 
-.plan-text {
-  margin-bottom: 18px;
-}
-
 .pricing-card ul {
   list-style: none;
   padding: 0;
@@ -457,9 +560,6 @@ p {
   border-bottom: 1px solid rgba(31, 26, 23, 0.07);
 }
 
-/* ------------------------------
-   Contact
------------------------------- */
 .contact-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -474,66 +574,10 @@ p {
   margin-top: 24px;
 }
 
-.contact-notes span {
-  background: rgba(255, 255, 255, 0.75);
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 10px 14px;
-  font-size: 0.94rem;
-  color: var(--text);
-}
-
 .contact-form {
   padding: 28px;
 }
 
-.form-group {
-  margin-bottom: 18px;
-}
-
-label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 700;
-  color: var(--text);
-}
-
-input,
-select,
-textarea {
-  width: 100%;
-  padding: 14px 15px;
-  border-radius: 14px;
-  border: 1px solid rgba(31, 26, 23, 0.12);
-  background: rgba(255, 255, 255, 0.85);
-  font: inherit;
-  color: var(--text);
-  outline: none;
-  -webkit-appearance: none;
-  appearance: none;
-}
-
-input:focus,
-select:focus,
-textarea:focus {
-  border-color: rgba(90, 63, 44, 0.45);
-  box-shadow: 0 0 0 3px rgba(90, 63, 44, 0.08);
-}
-
-textarea {
-  resize: vertical;
-  min-height: 130px;
-}
-
-.form-message {
-  margin-top: 14px;
-  font-weight: 600;
-  color: var(--accent);
-}
-
-/* ------------------------------
-   Footer
------------------------------- */
 .site-footer {
   padding: 28px 0 40px;
   border-top: 1px solid rgba(31, 26, 23, 0.08);
@@ -547,14 +591,6 @@ textarea {
   flex-wrap: wrap;
 }
 
-.footer-content h3 {
-  margin-bottom: 6px;
-}
-
-.footer-content p {
-  margin-bottom: 0;
-}
-
 .footer-links {
   display: flex;
   flex-wrap: wrap;
@@ -566,9 +602,16 @@ textarea {
   font-weight: 600;
 }
 
-/* ------------------------------
-   Responsive
------------------------------- */
+@media (max-width: 1180px) {
+  .editor-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .editor-sidebar {
+    position: static;
+  }
+}
+
 @media (max-width: 1024px) {
   .hero-grid,
   .split-grid,
@@ -577,17 +620,8 @@ textarea {
   }
 
   .cards-grid,
-  .styles-grid,
   .pricing-grid {
     grid-template-columns: repeat(2, 1fr);
-  }
-
-  .steps-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .hero-text {
-    max-width: 700px;
   }
 }
 
@@ -623,9 +657,9 @@ textarea {
   }
 
   .cards-grid,
-  .styles-grid,
   .pricing-grid,
-  .steps-grid {
+  .theme-grid,
+  .section-actions {
     grid-template-columns: 1fr;
   }
 
@@ -642,6 +676,19 @@ textarea {
   .featured-plan {
     transform: none;
   }
+
+  .item-row {
+    grid-template-columns: 1fr;
+  }
+
+  .canvas-surface {
+    min-height: auto;
+    padding: 18px;
+  }
+
+  .menu-canvas {
+    min-height: auto;
+  }
 }
 
 @media (max-width: 480px) {
@@ -649,19 +696,46 @@ textarea {
     padding-top: 48px;
   }
 
-  .menu-preview {
+  .menu-preview,
+  .editor-menu-preview {
     padding: 22px;
     border-radius: 22px;
   }
 
   .feature-card,
-  .step-card,
   .pricing-card,
-  .contact-form {
-    padding: 22px;
+  .contact-form,
+  .editor-panel {
+    padding: 20px;
+  }
+}
+
+@media print {
+  body * {
+    visibility: hidden !important;
   }
 
-  .footer-content {
-    align-items: flex-start;
+  #printArea,
+  #printArea * {
+    visibility: visible !important;
+  }
+
+  #printArea {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    display: block !important;
+    background: #fff !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .editor-menu-preview {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    padding: 28px !important;
   }
 }
